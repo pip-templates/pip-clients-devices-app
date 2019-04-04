@@ -1,0 +1,75 @@
+<pip-menu-layout [ngClass]="{'pip-single-content': isSingle$ | async}">
+        <div class="pip-menu" fxLayout="column">
+            <div class="scroll-container" fxLayout="column">
+                <devices-list *ngIf="(viewState$ | async) != 'empty' && (viewState$ | async) != 'progress' || media.isMainActive('gt-sm')"
+                                      [selectId]="selectId$ | async" [devices]="devices$ | async" [loading]="loading$ | async"
+                                      [state]="viewState$ | async" (selectChange)="select($event)" (add)="initAdd()"
+                                        [emptyStateActions]="emptyStateActions">
+                </devices-list>
+                <pip-empty-state *ngIf="(viewState$ | async) == 'progress' && !media.isMainActive('gt-sm')">
+                    <pip-empty-state-title [text]="'DEVICE.LOADING' | translate" imageUrl="./assets/progress.svg"></pip-empty-state-title>
+                    <div class="pip-progress">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </div>
+                </pip-empty-state>
+      
+                <pip-empty-state *ngIf="(viewState$ | async) == 'empty' && !media.isMainActive('gt-sm')">
+                    <pip-empty-state-title [text]="'DEVICE.EMPTY.TEXT' | translate" [subText]="'DEVICE.EMPTY.SUBTEXT' | translate"
+                                           imageUrl="./assets/empty.svg"></pip-empty-state-title>
+                    <pip-empty-state-actions [actions]="emptyStateActions"></pip-empty-state-actions>
+                </pip-empty-state>
+            </div>
+            <button mat-fab color="primary" class="pip-fab" (click)="initAdd()" *ngIf="state == 'view' || state == 'edit' || state == 'create'"
+                    [disabled]="(loading$ | async) || state == 'edit' || state == 'create'">
+                <mat-icon aria-label="create">add</mat-icon>
+            </button>
+        </div>
+      
+        <div class="pip-menu-container" [ngSwitch]="viewState$ | async">
+            <pip-document-layout *ngSwitchCase="'progress'">
+                <pip-document-content>
+                    <pip-empty-state>
+                        <pip-empty-state-title [text]="'DEVICE.LOADING' | translate" imageUrl="./assets/progress.svg"></pip-empty-state-title>
+                        <div class="pip-progress">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        </div>
+                    </pip-empty-state>
+                </pip-document-content>
+            </pip-document-layout>
+            <pip-document-layout *ngSwitchCase="'empty'">
+                <pip-document-content>
+                    <pip-empty-state>
+                        <pip-empty-state-title [text]="'DEVICE.EMPTY.TEXT' | translate" [subText]="'DEVICE.EMPTY.SUBTEXT' | translate"
+                                               imageUrl="./assets/empty.svg"></pip-empty-state-title>
+                        <pip-empty-state-actions [actions]="emptyStateActions"></pip-empty-state-actions>
+                    </pip-empty-state>
+                </pip-document-content>
+            </pip-document-layout>
+      
+            <device-details #deviceDetails *ngSwitchDefault 
+                                    [device]="selectDevice$ | async" 
+                                    [loading]="loading$ | async"
+                                    [single]="isSingle$ | async"
+                                    [error]="error$ | async" 
+                                    (delete)="openDeleteDialog($event)"
+                                    (attach)="openAttachDeviceDialog($event)"
+                                    (detachObject)="detachObject($event)"
+                                    (addGeolocation)="addGeolocation($event)"
+                                    (addSensor)="addSensor($event)"
+                                    (cancel)="cancel()" 
+                                    (change)="change()" 
+                                    (update)="update($event)">
+            </device-details>
+      
+            <device-details *ngSwitchCase="'create'" 
+                                    [device]="emptyDevice" 
+                                    [loading]="loading$ | async"
+                                    [error]="error$ | async"  
+                                    (attach)="openAttachDeviceDialog($event)"
+                                    (detachObject)="detachObject($event)"
+                                    (cancel)="cancel()" 
+                                    (update)="create($event)">
+            </device-details>
+      
+        </div>
+</pip-menu-layout>

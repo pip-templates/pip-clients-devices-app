@@ -1,0 +1,163 @@
+<pip-document-layout>
+    <pip-document-content>
+        <div>
+            <mat-progress-bar mode="indeterminate" *ngIf="loading" class="pip-loading"></mat-progress-bar>
+
+            <mat-error *ngIf="error" class="error-container">
+                {{ getErrorMessage(error) }}
+            </mat-error>
+
+            <form fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
+                <mat-form-field>
+                    <input matInput type="text" id="udi" name="udi" formControlName="udi" required/>
+
+                    <mat-placeholder>
+                        <span translate>DEVICE_DETAILS_UDI_PLACEHOLDER</span>
+                    </mat-placeholder>
+                    <mat-error *ngIf="hasError('udi', 'required')">
+                        {{ 'DEVICE_DETAILS_UDI_ERROR_REQUIRED' | translate }}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+
+            <mat-tab-group id="tab-group" [selectedIndex]="tabIndex" (selectedIndexChange)="onTabChange($event)">
+                <mat-tab #tab_info label="{{ 'DEVICE_DETAILS_TAB_INFO' | translate }}">
+                    <div class="mat-tab-container">
+                        <form fxLayout="column" [formGroup]="form">
+                            <ng-container>
+                                <mat-form-field>
+                                    <mat-select id="model" name="model" formControlName="model" required>
+                                        <mat-option *ngFor="let m of deviceModels" [value]="m">
+                                            {{ m }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-placeholder>
+                                        <span translate>DEVICE_DETAILS_MODEL_PLACEHOLDER</span>
+                                    </mat-placeholder>
+                                    <mat-error *ngIf="hasError('model', 'required')">
+                                        {{ 'DEVICE_DETAILS_MODEL_ERROR_REQUIRED' | translate }}
+                                    </mat-error>
+                                </mat-form-field>
+                            </ng-container>
+
+                            <ng-container>
+                                <mat-form-field>
+                                    <input matInput type="text" id="label" name="label" formControlName="label" />
+                                    <mat-placeholder>
+                                        <span translate>DEVICE_DETAILS_LABEL_PLACEHOLDER</span>
+                                    </mat-placeholder>
+                                </mat-form-field>
+                            </ng-container>
+
+                            <mat-form-field>
+                                <mat-select id="status" name="status" formControlName="status" required>
+                                    <mat-option *ngFor="let s of statuses" [value]="s">
+                                        {{ s | statusTranslate }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-placeholder>
+                                    <span translate>DEVICE_DETAILS_STATUS_PLACEHOLDER</span>
+                                </mat-placeholder>
+                            </mat-form-field>
+                        </form>
+                        <div fxLayout="column" *ngIf="updateItem.attached_object">
+                            <span>{{ 'DEVICE_DETAILS_ATTACH_CAPTION' | translate }}</span>
+                            <mat-list class="object-list">
+                                <pip-ref-item [title]="updateItem?.attached_object?.name" [subtitle]="updateItem?.attached_object?.type"
+                                              [defaultIconBackground]="AttachedToColor" [letterSource]="updateItem?.attached_object?.type.toUpperCase() || '?'"></pip-ref-item>
+                            </mat-list>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutGap="16px" class="object-actions" *ngIf="updateItem.id">
+                            <button mat-raised-button (click)="onChangeObject()" *ngIf="updateItem.attached_object"
+                                    [disabled]="loading || form.invalid || form.disabled">
+                                <span class="pip-title">{{ 'DEVICE_DETAILS_ATTACH_CHANGE' | translate }}</span>
+                            </button>
+                            <button mat-raised-button (click)="onAttachObject()" *ngIf="!updateItem.attached_object"
+                                    [disabled]="loading || form.invalid || form.disabled">
+                                <span class="pip-title">{{ 'DEVICE_DETAILS_ATTACH' | translate }}</span>
+                            </button>
+                            <button mat-raised-button (click)="onDetachObject()" *ngIf="updateItem.attached_object"
+                                    [disabled]="loading || form.invalid || form.disabled">
+                                <span class="pip-title">{{ 'DEVICE_DETAILS_ATTACH_DETACH' | translate }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab #tab_geo label="{{ 'DEVICE_DETAILS_TAB_GEOLOCATION' | translate }}" [disabled]='!this.updateItem.id'>
+                    <mat-list *ngIf="updateItem.geolocation_devices?.length > 0">
+                        <pip-ref-item *ngFor="let geo_device of updateItem.geolocation_devices" class="pointer" [title]="geo_device?.type"
+                                      subtitle="{{ geo_device | geolocationStatus }}" [defaultIconBackground]="GeoDeviceColor"
+                                      [letterSource]="geo_device?.type.toUpperCase() || '?'" (click)="onChangeGeoDevice(geo_device)">
+                            <pip-ref-item-actions>
+                                <button mat-icon-button>
+                                    <mat-icon aria-label="DELETE" (click)="onDeleteGeoDevice(geo_device, $event)">
+                                        close
+                                    </mat-icon>
+                                </button>
+                            </pip-ref-item-actions>
+                        </pip-ref-item>
+
+                    </mat-list>
+                    <pip-empty-state *ngIf="!updateItem.geolocation_devices || updateItem.geolocation_devices.length == 0">
+                        <pip-empty-state-title [text]="'DEVICE_DETAILS_GEO_EMPTY' | translate" imageUrl="./assets/empty.svg"></pip-empty-state-title>
+                        <pip-empty-state-actions [actions]="emptyStateGeoActions"></pip-empty-state-actions>
+                    </pip-empty-state>
+                </mat-tab>
+                <mat-tab #tab_sensor label=" {{ 'DEVICE_DETAILS_TAB_SENSORS' | translate }}" [disabled]='!this.updateItem.id'>
+                    <mat-list *ngIf="updateItem.sensors?.length > 0">
+                        <pip-ref-item *ngFor="let sensor of updateItem.sensors" class="pointer" [title]="sensor.name"
+                                      subtitle="{{ sensor.status | statusTranslate }}" [defaultIconBackground]="SensorColor"
+                                      [letterSource]="sensor?.name.toUpperCase() || '?'" (click)="onChangeSensor(sensor)">
+                            <pip-ref-item-actions>
+                                <button mat-icon-button secondary=true>
+                                    <mat-icon aria-label="DELETE" (click)="onDeleteSensor(sensor, $event)"> close
+                                    </mat-icon>
+                                </button>
+                            </pip-ref-item-actions>
+                        </pip-ref-item>
+
+                    </mat-list>
+                    <pip-empty-state *ngIf="!updateItem.sensors || updateItem.sensors.length == 0">
+                        <pip-empty-state-title [text]="'DEVICE_DETAILS_OEM_EMPTY' | translate" imageUrl="./assets/empty.svg"></pip-empty-state-title>
+                        <pip-empty-state-actions [actions]="emptyStateOEMActions"></pip-empty-state-actions>
+                    </pip-empty-state>
+                </mat-tab>
+            </mat-tab-group>
+
+        </div>
+    </pip-document-content>
+    <pip-document-footer>
+
+        <pip-action-list *ngIf="tab_info.isActive">
+            <button mat-button class="pip-action-list-item" (click)="saveSubmit()" *ngIf="form.dirty"
+                    [disabled]="loading || form.invalid">
+                <mat-icon fontSet="webui" fontIcon="webui-check"></mat-icon>
+                <span class="pip-title">{{ 'DEVICE_DETAILS_SAVE_BUTTON' | translate }}</span>
+            </button>
+            <button mat-button class="pip-action-list-item" (click)="onCancel()" *ngIf="form.dirty"
+                    [disabled]="loading">
+                <mat-icon fontSet="webui" fontIcon="webui-cross"></mat-icon>
+                <span class="pip-title">{{ 'DEVICE_DETAILS_CANCEL_BUTTON' | translate }}</span>
+            </button>
+            <button mat-button class="pip-action-list-item" (click)="deleteSubmit()" [disabled]="loading" *ngIf="updateItem.id">
+                <mat-icon fontSet="webui" fontIcon="webui-trash"></mat-icon>
+                <span class="pip-title">{{ 'DEVICE_DETAILS_DELETE_BUTTON' | translate }}</span>
+            </button>
+        </pip-action-list>
+
+        <pip-action-list *ngIf="tab_geo.isActive">
+            <button mat-button class="pip-action-list-item long-button" (click)="onAddGeolocation()" [disabled]="loading">
+                <mat-icon fontSet="webui" fontIcon="webui-plus"></mat-icon>
+                <span class="pip-title">{{ 'DEVICE_DETAILS_GEO_ADD' | translate }}</span>
+            </button>
+        </pip-action-list>
+
+        <pip-action-list *ngIf="tab_sensor.isActive">
+            <button mat-button class="pip-action-list-item long-button" (click)="onAddSensor()" [disabled]="loading">
+                <mat-icon fontSet="webui" fontIcon="webui-plus"></mat-icon>
+                <span class="pip-title">{{ 'DEVICE_DETAILS_OEM_ADD' | translate }}</span>
+            </button>
+        </pip-action-list>
+    </pip-document-footer>
+</pip-document-layout>

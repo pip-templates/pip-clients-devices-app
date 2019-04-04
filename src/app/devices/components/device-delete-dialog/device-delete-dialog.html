@@ -1,0 +1,9 @@
+<h1 mat-dialog-title class="pip-header"> {{ data.InformationTitle | translate }} </h1>
+<div mat-dialog-content class="pip-content">
+    <p>{{ data.InformationMessage | translate }}</p>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">{{ data.CancelButtonLabel | translate }}</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>{{ data.OkButtonLabel | translate }}</button>
+</div>
+

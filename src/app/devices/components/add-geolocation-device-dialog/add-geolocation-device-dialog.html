@@ -1,0 +1,71 @@
+<h1 mat-dialog-title class="pip-header">{{ dialogTitle | translate }}</h1>
+<div mat-dialog-content class="pip-content">
+    <form #deviceForm="ngForm" fxLayout="column">
+        <ng-container>
+            <mat-form-field>
+                <mat-select id="deviceType" name="deviceType" [(ngModel)]="geoDevice.type" #_model="ngModel" required>
+                    <mat-option *ngFor="let m of data.deviceTypeList" [value]="m">
+                        {{ m }}
+                    </mat-option>
+                </mat-select>
+                <mat-placeholder>
+                    <span translate>DEVICE.CHANGE.GEODEVICE.DIALOG.TYPE.PLACEHOLDER</span>
+                </mat-placeholder>
+                <mat-error *ngIf="(_model.dirty || _model.touched) && _model.errors?.required">
+                    {{ 'DEVICE.CHANGE.GEODEVICE.DIALOG.TYPE.ERROR' | translate }}
+                </mat-error>
+            </mat-form-field>
+        </ng-container>
+
+        <div fxLayout="row">
+            <mat-form-field class="pip-full-width" style="margin-right: 16px">
+                <input matInput type="number" id="offset_x" name="offset_x" [(ngModel)]="geoDevice.offset_x" #_offset_x="ngModel" />
+                <mat-placeholder>
+                    <span translate>DEVICE.CHANGE.GEODEVICE.DIALOG.OFFSET_X.PLACEHOLDER</span>
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field class="pip-full-width">
+                <input matInput type="number" id="offset_y" name="offset_y" [(ngModel)]="geoDevice.offset_y" #_offset_y="ngModel" />
+                <mat-placeholder>
+                    <span translate>DEVICE.CHANGE.GEODEVICE.DIALOG.OFFSET_Y.PLACEHOLDER</span>
+                </mat-placeholder>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field class="pip-full-width" style="margin-right: 16px">
+                <input matInput type="number" id="dir_start" name="dir_start" [(ngModel)]="geoDevice.dir_start"
+                    #_dir_start="ngModel" />
+                <mat-placeholder>
+                    <span translate>DEVICE.CHANGE.GEODEVICE.DIALOG.DIRECTION_START.PLACEHOLDER</span>
+                </mat-placeholder>
+            </mat-form-field>
+
+            <mat-form-field class="pip-full-width">
+                <input matInput type="number" id="dir_end" name="dir_end" [(ngModel)]="geoDevice.dir_end" #_dir_end="ngModel" />
+                <mat-placeholder>
+                    <span translate>DEVICE.CHANGE.GEODEVICE.DIALOG.DIRECTION_END.PLACEHOLDER</span>
+                </mat-placeholder>
+            </mat-form-field>
+        </div>
+        <mat-form-field class="pip-full-width">
+            <input matInput type="number" id="distance" name="distance" [(ngModel)]="geoDevice.distance" #_distance="ngModel" />
+            <mat-placeholder>
+                <span translate>DEVICE.CHANGE.GEODEVICE.DIALOG.DISTANCE.PLACEHOLDER</span>
+            </mat-placeholder>
+        </mat-form-field>
+
+        <mat-checkbox color="primary" [checked]="geoDevice.status=='Active'" (change)="geoDevice.status = $event.checked ? 'Active' : 'Inactive'">{{
+                geoDevice.status | statusTranslate }}
+        </mat-checkbox>
+
+        <div style="height: 48px">
+
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">{{ 'DEVICE.CHANGE.GEODEVICE.DIALOG.CANCEL' | translate }}</button>
+    <button mat-button [mat-dialog-close]="geoDevice" [disabled]="!geoDevice.type" cdkFocusInitial>{{ actionButtonText
+        | translate }}</button>
+</div>

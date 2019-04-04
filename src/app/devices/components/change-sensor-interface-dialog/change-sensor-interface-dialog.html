@@ -1,0 +1,36 @@
+<h1 mat-dialog-title class="pip-header">{{ dialogTitle | translate }}</h1>
+<div mat-dialog-content class="pip-content">
+    <form #deviceForm="ngForm" fxLayout="column">
+        <ng-container>
+            <mat-form-field>
+                <mat-select id="deviceType" name="deviceType" [(ngModel)]="sensor.name"
+                            #_model="ngModel" required>
+                    <mat-option *ngFor="let m of data.sensorList" [value]="m">
+                        {{ m }}
+                    </mat-option>
+                </mat-select>
+                <mat-placeholder>
+                        <span translate>DEVICE.CHANGE.SENSOR.DIALOG.SENSOR.NAME.PLACEHOLDER</span>
+                    </mat-placeholder> 
+                <mat-error *ngIf="(_model.dirty || _model.touched) && _model.errors?.required">
+                        {{ 'DEVICE.CHANGE.SENSOR.DIALOG.SENSOR.NAME.ERROR' | translate }}
+                </mat-error>
+            </mat-form-field>
+        </ng-container>
+ 
+ 
+        <mat-checkbox color="primary"
+            [checked]="sensor.status=='Active'" 
+            (change)="sensor.status = $event.checked ? 'Active' : 'Inactive'">
+                {{ sensor.status | statusTranslate }}
+        </mat-checkbox>
+        <div style="height: 48px">
+
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">{{ 'DEVICE.CHANGE.SENSOR.DIALOG.BUTTON.CANCEL' | translate }}</button>
+    <button mat-button [mat-dialog-close]="sensor" [disabled]="!sensor.name" cdkFocusInitial>{{ actionButtonText | translate }}</button>
+</div>
+ 

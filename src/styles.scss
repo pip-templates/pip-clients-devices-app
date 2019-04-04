@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~pip-webui2-themes/styles.scss";
+@import "~pip-webui2-layouts/styles.scss";
+.letter-icon {
+    color: white;
+}
+
+.letter-icon svg {
+    fill: black;
+}
+
+.letter-icon.mat-list-icon {
+    vertical-align: middle !important;
+    text-align: center;
+    width: 40px!important;
+    height: 40px!important;
+    padding: 0!important;
+    line-height: 40px;
+    font-family: Roboto;
+}
+
+.rp16 {
+    padding-right: 16px !important;
+}
+
+.rm16 {
+    margin-right: 16px!important;
+}

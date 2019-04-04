@@ -1,0 +1,13 @@
+<h1 mat-dialog-title class="pip-header">{{ 'DEVICE.ATTACH.DIALOG.TITLE' | translate }}</h1>
+<div mat-dialog-content class="pip-content">
+    <pip-selected (onSelect)="onSelect($event)" [index]="index">
+        <mat-nav-list>
+            <pip-ref-item *ngFor="let object of data.objects" (click)="select(object)" [title]="object?.name"
+                          [subtitle]="object?.type" defaultIconBackground="#880e4f" [letterSource]="object?.type.toUpperCase()"></pip-ref-item>
+        </mat-nav-list>
+    </pip-selected>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">{{ 'DEVICE.ATTACH.DIALOG.BUTTON.CANCEL' | translate }}</button>
+    <button mat-button [mat-dialog-close]="data.selected" [disabled]="!data.selected" cdkFocusInitial>{{ 'DEVICE.ATTACH.DIALOG.BUTTON.ATTACH' | translate }}</button>
+</div>

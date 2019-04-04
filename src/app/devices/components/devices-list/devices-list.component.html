@@ -1,0 +1,36 @@
+<pip-selected (onSelect)="onSelect($event)" [index]="index" [disableSelect]="state == 'edit'" >
+    <mat-nav-list [ngSwitch]="state">
+        <div *ngSwitchCase="'progress'">
+            <pip-empty-state class="pip-show-xs-sm">
+                <pip-empty-state-title [text]="progressText" [imageUrl]="progressImageUrl"></pip-empty-state-title>
+                <div class="pip-progress">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+            </pip-empty-state>
+            <img class="pip-show-gt-sm pip-list-empty" src="{{ emptyListUrl }}" alt="{{ emptyListUrl || 'empty devices' }}">
+        </div>
+
+        <div *ngSwitchCase="'empty'">
+            <pip-empty-state class="pip-show-xs-sm">
+                <pip-empty-state-title [text]="emptyText" [subText]="emptySubText" [imageUrl]="emptyImageUrl"></pip-empty-state-title>
+                <pip-empty-state-actions [actions]="emptyStateActions"></pip-empty-state-actions>
+            </pip-empty-state>
+            <img class="pip-show-gt-sm pip-list-empty" src="{{ emptyListUrl }}" alt="{{ emptyListUrl || 'empty devices' }}">
+        </div>
+
+        <div *ngSwitchDefault>
+            <pip-ref-item *ngFor="let device of devices; trackBy: device?.id" pipSelectable (click)="select(device?.id)"
+                    [id]="device.id" [title]="device.udi" [subtitle]="device.attached_object?.name || withouAttachedObjectLabel" 
+                    [defaultIconBackground]="DeviceColor" [letterSource]="device.attached_object?.name || device.label?.toUpperCase() || device.udi?.toUpperCase()"></pip-ref-item>
+        </div>
+
+        <div *ngSwitchCase="'create'">
+            <pip-ref-item class="pip-selectable pip-selected-item" [title]="newDeviceText" [subtitle]="newDeviceSubText"
+                          [defaultIconBackground]="DeviceColor" letterSource="+" ></pip-ref-item>
+
+            <pip-ref-item *ngFor="let device of devices; trackBy: device?.id" (click)="select(device.id)" [id]="device.id"
+                    [title]="device.udi" [subtitle]="device.attached_object?.name || withouAttachedObjectLabel"
+                    [defaultIconBackground]="DeviceColor" [letterSource]="device.attached_object?.name || device.label?.toUpperCase() || device.udi?.toUpperCase()"></pip-ref-item>
+        </div>
+    </mat-nav-list>
+</pip-selected>

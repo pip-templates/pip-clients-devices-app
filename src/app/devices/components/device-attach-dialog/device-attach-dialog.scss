@@ -1,0 +1,110 @@
+$font-family: Roboto,
+'Helvetica Neue',
+sans-serif;
+
+$font-size-body1: 14px;
+$font-weight-body1: 400;
+$letter-spacing-body1: .01em;
+$line-height-body1: 20px;
+$font-body1: normal $font-weight-body1 $font-size-body1 $font-family;
+$font-size-title: 24px;
+$font-weight-title: 500;
+$letter-spacing-title: .01em;
+$line-height-title: 32px;
+$font-title: normal $font-weight-title $font-size-title $font-family;
+:host {
+    .pip-header {
+        font: $font-title;
+    }
+    .pip-content {
+        overflow: auto;
+        height: 100%;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .mat-list-item {
+        outline: none;
+        // height: 100% !important;
+    }
+}
+
+[mat-dialog-actions] button {
+    text-transform: uppercase;
+}
+
+.pip-ref-item {
+    $font-family: Roboto, 'Helvetica Neue', sans-serif;
+    $font-size-subhead1: 16px;
+    $font-weight-subhead1: 400;
+    $letter-spacing-subhead1: .01em;
+    $line-height-subhead1: 24px;
+    $font-subhead1: normal $font-weight-subhead1 $font-size-subhead1 $font-family;
+    $font-size-subhead2: 16px;
+    $font-weight-subhead2: 500;
+    $letter-spacing-subhead2: .01em;
+    $line-height-subhead2: 24px;
+    $font-subhead2: normal $font-weight-subhead2 $font-size-subhead2 $font-family;
+    $font-size-body1: 14px;
+    $font-weight-body1: 400;
+    $letter-spacing-body1: .01em;
+    $line-height-body1: 20px;
+    $font-body1: normal $font-weight-body1 $font-size-body1 $font-family;
+    $font-size-body2: 14px;
+    $font-weight-body2: 500;
+    $letter-spacing-body2: .01em;
+    $line-height-body2: 24px;
+    $font-body2: normal $font-weight-body2 $font-size-body2 $font-family;
+    .mat-list-item {
+        outline: none;
+    }
+    :host ::ng-deep .mat-list-item-content {
+        align-items: flex-start !important;
+        padding: 8px 16px !important;
+        height: 100% !important;
+    }
+    :host {
+        display: block;
+    }
+    .pip-title {
+        -webkit-user-select: auto;
+        font: $font-subhead2 !important;
+        margin-top: 1px !important;
+        margin-bottom: 4px !important;
+    }
+    .pip-subtitle {
+        font: $font-body1 !important;
+        opacity: 0.54;
+    }
+    .pip-icon {
+        width: 15px;
+        height: 15px;
+        min-height: 15px;
+        min-width: 15px;
+        vertical-align: middle;
+        margin-top: -1px;
+        font-size: $font-size-body1;
+    }
+    .pip-text-bold {
+        font: $font-body2 !important;
+    }
+    .pip-text {
+        font: $font-body1 !important;
+        max-height: 2.5em;
+        line-height: 1.5em;
+        margin-right: 16px;
+        overflow: hidden;
+    }
+    .pip-pic {
+        height: 100% !important;
+        margin-top: 8px;
+    }
+    .text-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    p {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+}

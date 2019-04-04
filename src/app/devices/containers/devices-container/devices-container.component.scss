@@ -1,0 +1,41 @@
+:host {
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+pip-document-content {
+    height: calc( 100% - 32px);
+}
+
+.pip-progress {
+    width: 100%;
+    text-align: center;
+    mat-progress-bar {
+        max-width: 250px;
+        margin: 0 auto;
+        margin-top: 16px;
+    }
+}
+
+.scroll-container {
+    position: relative;
+    border-right: none;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc( 100%);
+    min-height: calc( 100%);
+    max-height: calc( 100%);
+}
+
+.pip-fab {
+    position: absolute;
+    top: calc(100% - 80px);
+    right: 24px;
+}
+
+.pip-menu-layout .pip-menu {
+    position: relative;
+}

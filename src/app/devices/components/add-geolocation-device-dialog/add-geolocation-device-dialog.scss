@@ -1,0 +1,35 @@
+$font-family: Roboto,
+'Helvetica Neue',
+sans-serif;
+
+$font-size-body1: 14px;
+$font-weight-body1: 400;
+$letter-spacing-body1: .01em;
+$line-height-body1: 20px;
+$font-body1: normal $font-weight-body1 $font-size-body1 $font-family;
+$font-size-title: 24px;
+$font-weight-title: 500;
+$letter-spacing-title: .01em;
+$line-height-title: 32px;
+$font-title: normal $font-weight-title $font-size-title $font-family;
+:host {
+    .pip-header {
+        font: $font-title;
+    }
+    .pip-content {
+        overflow: auto;
+        height: 100%;
+ 
+        font: $font-body1;
+    }
+ 
+}
+
+[mat-dialog-actions] button {
+    text-transform: uppercase;
+}
+
+.pip-full-width {
+    width: 100%;
+}
+ 
